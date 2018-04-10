@@ -58,4 +58,15 @@ __KEYS__ = []
 
 > Note: this generator is for new people who would like to get their feet wet with snips and do not really know where to start
 
-The generator will 
+The generator will create a new script named script.py in your current working directory
+
+###Once info.py is updated:
+
+Once info.py is updated with current information, run the generator.py script from the command line:
+
+
+```
+sudo python3 generator.py
+```
+
+If something the generator finds is incorrect in your info.py script, it will default to the example.py - so if something does not look right in the new script.py, then there could be a problem with the info.py
