@@ -36,7 +36,7 @@ def isFile(path):
 
 if_topics = """"""
 for topic in info.__TOPICS__:
-    if_topics = if_topics + """\t\n    if msg.topic == hermes/intent/{0}: \n        response = 'Here is the the intent! ... {1}'""".format(topic, topic)
+    if_topics = if_topics + """\t\n    if msg.topic == 'hermes/intent/{0}': \n        response = 'Here is the the intent! ... {1}'""".format(topic, topic)
 
 body = """from modules import info
 import paho.mqtt.client as mqtt
@@ -51,6 +51,7 @@ TOPICS = info.__TOPICS__
 ###########################################
 def on_connect(client, userdata, flags, rc):
     for topic in TOPICS:
+        topic = 'hermes/intent/{0}'.format(topic)
         mqtt_client.subscribe(topic)
 
 def parse_slots(msg):
@@ -69,7 +70,9 @@ def say(session_id, text):
 
 
 def on_message(client, userdata, msg):
-    if msg.topic not in TOPICS:
+    topicName = msg.topic.split('/')
+    
+    if topicName[2] not in TOPICS:
         return False
     slots = parse_slots(msg)
     %s
@@ -92,7 +95,7 @@ if_topics
 
 
 
-if isFile(info._PATH__ + 'script.py'):
+if isFile(info.__PATH__ + 'script.py'):
     file = 'script.py'
 else:
     files = open('script.py', 'w+')
