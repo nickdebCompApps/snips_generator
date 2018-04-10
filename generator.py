@@ -1,4 +1,5 @@
 from modules import info
+from modules import example
 import os.path
 from time import sleep as Sleep
 
@@ -35,10 +36,15 @@ def isFile(path):
 
 
 if_topics = """"""
-for topic in info.__TOPICS__:
-    if_topics = if_topics + """\t\n    if msg.topic == 'hermes/intent/{0}': \n        response = 'Here is the the intent! ... {1}'""".format(topic, topic)
+if info.__TOPICS__ is None:
+    for topic in example.__TOPICS__:
+    if_topics = if_topics + """\t\n    if msg.topic == 'hermes/intent/{0}': \n        response = 'Here is the the intent! ... {1}'""".format(topic, topic)      
+else:
+    for topic in info.__TOPICS__:
+        if_topics = if_topics + """\t\n    if msg.topic == 'hermes/intent/{0}': \n        response = 'Here is the the intent! ... {1}'""".format(topic, topic)
 
 body = """from modules import info
+from modules import example
 import paho.mqtt.client as mqtt
 import requests
 import json
@@ -48,11 +54,21 @@ HOST = info.__MQTT_CONFIG__['HOST']
 PORT = int(info.__MQTT_CONFIG__['PORT'])
 TOPICS = info.__TOPICS__
 
+if HOST is None:
+    HOST = example.__MQTT_CONFIG__['HOST']
+if PORT is None:
+    PORT = example.__MQTT_CONFIG__['PORT'])
+
 ###########################################
 def on_connect(client, userdata, flags, rc):
-    for topic in TOPICS:
+    if TOPICS is None:
+        for topic in example.__TOPICS__:
         topic = 'hermes/intent/{0}'.format(topic)
         mqtt_client.subscribe(topic)
+    else:
+        for topic in TOPICS:
+            topic = 'hermes/intent/{0}'.format(topic)
+            mqtt_client.subscribe(topic)
 
 def parse_slots(msg):
     data = json.loads(msg.payload.decode())
