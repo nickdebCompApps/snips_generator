@@ -1,50 +1,5 @@
 from modules import info
 from modules import example
-import os.path
-from time import sleep as Sleep
-
-class Handler():
-
-    def __init__(self, file):
-        self.file = file
-        self.body = None
-
-    def read(self):
-        with open(self.file, 'r') as script:
-            for line in script:
-                print(line)
-
-    def write(self, body):
-        self.body = body
-        if self.body is not None:
-            with open(self.file, 'a') as script:
-                script.write(self.body)
-
-    def clearAndWrite(self, body):
-        self.body = body
-        if self.body is not None:
-            with open(self.file, 'w') as script:
-                script.write(self.body)
-
-
-def isFile(path):
-    try:
-        os.path.exists(path)
-        return True
-    except:
-        return False
-
-
-if_topics = """"""
-if not info.__TOPICS__:
-    for topic in example.__TOPICS__:
-        if_topics = if_topics + """\t\n    if msg.topic == 'hermes/intent/{0}': \n        response = 'Here is the the intent! ... {1}'""".format(topic, topic)      
-else:
-    for topic in info.__TOPICS__:
-        if_topics = if_topics + """\t\n    if msg.topic == 'hermes/intent/{0}': \n        response = 'Here is the the intent! ... {1}'""".format(topic, topic)
-
-body = """from modules import info
-from modules import example
 import paho.mqtt.client as mqtt
 import requests
 import json
@@ -107,7 +62,15 @@ def on_message(client, userdata, msg):
     if topicName[2] not in TOPICS:
         return False
     slots = parse_slots(msg)
-    %s
+    	
+    if msg.topic == 'hermes/intent/searchWeatherForecast': 
+        response = 'Here is the the intent! ... searchWeatherForecast'	
+    if msg.topic == 'hermes/intent/searchWeatherForecastItem': 
+        response = 'Here is the the intent! ... searchWeatherForecastItem'	
+    if msg.topic == 'hermes/intent/searchWeatherForecastCondition': 
+        response = 'Here is the the intent! ... searchWeatherForecastCondition'	
+    if msg.topic == 'hermes/intent/searchWeatherForecastTemperature': 
+        response = 'Here is the the intent! ... searchWeatherForecastTemperature'
 
     print(response)
     session_id = parse_session_id(msg)
@@ -120,20 +83,3 @@ if __name__ == '__main__':
     mqtt_client.connect(HOST, PORT)
     mqtt_client.loop_forever()
 
-""" % (
-if_topics
-)
-
-
-
-
-if isFile(info.__PATH__ + 'script.py'):
-    file = 'script.py'
-else:
-    files = open('script.py', 'w+')
-    files.close()
-    file = 'script.py'
-
-handler = Handler(file)
-handler.clearAndWrite(body)
-handler.read()
