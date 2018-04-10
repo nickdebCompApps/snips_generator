@@ -60,7 +60,7 @@ __KEYS__ = []
 
 The generator will create a new script named script.py in your current working directory
 
-###Once info.py is updated:
+### Once info.py is updated:
 
 Once info.py is updated with current information, run the generator.py script from the command line:
 
