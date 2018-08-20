@@ -69,4 +69,10 @@ Once info.py is updated with current information, run the generator.py script fr
 sudo python3 generator.py
 ```
 
+After running that command, you should see a new script in the directory called script.py - run that and speak to snips
+
+```
+sudo python3 script.py
+```
+
 If something the generator finds is incorrect in your info.py script, it will default to the example.py - so if something does not look right in the new script.py, then there could be a problem with the info.py
